@@ -1,4 +1,4 @@
-# 📘 SQL Practice Queries – PostgreSQL
+# 📘 SQL Employee_Attrition Queries – PostgreSQL
 
 This repository contains a collection of SQL queries written in PostgreSQL as part of my data analysis and database learning journey. These queries are designed to explore various real-world datasets and cover a wide range of SQL concepts, including:
 
@@ -30,5 +30,5 @@ The goal of this project is to:
 ## ✅ Tools Used
 
 - PostgreSQL
-- pgAdmin (optional for query execution)
+- pgAdmin
 - GitHub
