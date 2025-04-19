@@ -117,3 +117,88 @@ from employee_data;
 --what is the average training times per year?
 select avg(trainingtimeslastyear) as avg_training_time
 from employee_data
+
+select min(age) from employee_data
+
+--what is the attrition rate across different age groups?
+SELECT
+  CASE
+    WHEN age BETWEEN 20 AND 29 THEN '20-29'
+    WHEN age BETWEEN 30 AND 39 THEN '30-39'
+    WHEN age BETWEEN 40 AND 49 THEN '40-49'
+    WHEN age BETWEEN 50 AND 59 THEN '50-59'
+    ELSE '60+'
+  END AS age_group,
+  COUNT(*) AS total_employees,
+  SUM(CASE WHEN attrition = 'Yes' THEN 1 ELSE 0 END) AS employees_left,
+  ROUND(
+    (SUM(CASE WHEN attrition = 'Yes' THEN 1 ELSE 0 END)::decimal / COUNT(*)) * 100, 2
+  ) AS attrition_rate_percent
+FROM employee_data
+GROUP BY age_group
+ORDER BY age_group;
+
+--Is there a pattern between distance from home and attrition rate
+SELECT 
+  distancefromhome,
+  COUNT(*) AS total_employees,
+  SUM(CASE WHEN attrition = 'Yes' THEN 1 ELSE 0 END) AS employees_left,
+  ROUND(
+    (SUM(CASE WHEN attrition = 'Yes' THEN 1 ELSE 0 END)::decimal / COUNT(*)) * 100, 
+    2
+  ) AS attrition_rate_percent
+FROM employee_data
+GROUP BY distancefromhome
+ORDER BY distancefromhome;
+
+--How does monthly income compare for employees who work overtime vs those who don't?
+select overtime, 
+ROUND(avg(monthlyincome),2) AS monthly_money
+from employee_data
+group by overtime;
+
+--Which job roles have the highest attrition and lowest job satisfaction?
+SELECT 
+  JobRole,
+  COUNT(*) AS total_employees,
+  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) AS employees_left,
+  ROUND(
+    (SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END)::decimal / COUNT(*)) * 100, 2
+  ) AS attrition_rate_percent,
+  ROUND(AVG(JobSatisfaction), 2) AS avg_job_satisfaction
+FROM employee_data
+GROUP BY JobRole
+ORDER BY attrition_rate_percent DESC, avg_job_satisfaction ASC;
+
+--which education field have the highest average performance ratings?
+select educationfield, ROUND(avg(performancerating),2) AS Performance_Rating
+from employee_data
+group by educationfield
+order by Performance_Rating desc;
+
+--what is the average number of years in the current role vs years with current manager?
+select avg(yearsincurrentrole) AS yearsinrole, AVG(yearswithcurrmanager) AS yearswithmanager
+from employee_data
+
+--what is the average percent salary hike by job level?
+select joblevel, avg(percentsalaryhike) AS Average_Money
+from employee_data
+group by joblevel;
+
+--Is there a correlation between environment satisfaction and attrition?
+SELECT 
+  EnvironmentSatisfaction,
+  COUNT(*) AS total_employees,
+  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) AS employees_left,
+  ROUND(
+    (SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END)::DECIMAL / COUNT(*)) * 100, 
+    2
+  ) AS attrition_rate_percent
+FROM employee_data
+GROUP BY EnvironmentSatisfaction
+ORDER BY EnvironmentSatisfaction;
+
+--what is the average number of years since last promotion for each job role?
+select jobrole, avg(yearssincelastpromotion) AS lastyearofpromotion
+from employee_data
+group by jobrole;
